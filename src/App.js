@@ -100,32 +100,32 @@ function App() {
     }
   }
 
-  const donateFundsHandler = async (event) => {
-    try {
-      event.preventDefault();
-      if (window.ethereum) {
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const bankContract = new ethers.Contract(contractAddress, contractABI, signer);
+//   const donateFundsHandler = async (event) => {
+//     try {
+//       event.preventDefault();
+//       if (window.ethereum) {
+//         const provider = new ethers.providers.Web3Provider(window.ethereum);
+//         const signer = provider.getSigner();
+//         const bankContract = new ethers.Contract(contractAddress, contractABI, signer);
 
-        let bankAddress = await bankContract.bankOwner();
-        console.log("provider signer...", bankAddress);
+//         let bankAddress = await bankContract.bankOwner();
+//         console.log("provider signer...", bankAddress);
 
-        const txn = await bankContract.DonateFunds(bankAddress, ethers.utils.parseEther(inputValue.donate));
-        console.log("Donating money...");
-        await txn.wait();
-        console.log("Thank You For your Donation", txn.hash);
+//         const txn = await bankContract.DonateFunds(bankAddress, ethers.utils.parseEther(inputValue.donate));
+//         console.log("Donating money...");
+//         await txn.wait();
+//         console.log("Thank You For your Donation", txn.hash);
 
-        customerBalanceHandler();
+//         customerBalanceHandler();
 
-      } else {
-        console.log("Ethereum object not found, install Metamask.");
-        setError("Please install a MetaMask wallet to use our bank.");
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+//       } else {
+//         console.log("Ethereum object not found, install Metamask.");
+//         setError("Please install a MetaMask wallet to use our bank.");
+//       }
+//     } catch (error) {
+//       console.log(error)
+//     }
+//   }
 
 
   const customerBalanceHandler = async () => {
