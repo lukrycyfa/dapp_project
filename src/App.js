@@ -12,7 +12,7 @@ function App() {
   const [customerAddress, setCustomerAddress] = useState(null);
   const [error, setError] = useState(null);
 
-  const contractAddress = '0x165aBaeD38C67ACF3AeD5aF011EF9060156FCE76';
+  const contractAddress = '0xDa412c7D0365249cb79e689FbF05a9C741a2e635';
   const contractABI = abi.abi;
 
   const checkIfWalletIsConnected = async () => {
@@ -100,32 +100,32 @@ function App() {
     }
   }
 
-//   const donateFundsHandler = async (event) => {
-//     try {
-//       event.preventDefault();
-//       if (window.ethereum) {
-//         const provider = new ethers.providers.Web3Provider(window.ethereum);
-//         const signer = provider.getSigner();
-//         const bankContract = new ethers.Contract(contractAddress, contractABI, signer);
+  const donateFundsHandler = async (event) => {
+    try {
+      event.preventDefault();
+      if (window.ethereum) {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const bankContract = new ethers.Contract(contractAddress, contractABI, signer);
 
-//         let bankAddress = await bankContract.bankOwner();
-//         console.log("provider signer...", bankAddress);
+        let bankAddress = await bankContract.bankOwner();
+        console.log("provider signer...", bankAddress);
 
-//         const txn = await bankContract.DonateFunds(bankAddress, ethers.utils.parseEther(inputValue.donate));
-//         console.log("Donating money...");
-//         await txn.wait();
-//         console.log("Thank You For your Donation", txn.hash);
+        const txn = await bankContract.DonateFunds(bankAddress, ethers.utils.parseEther(inputValue.donate));
+        console.log("Donating money...");
+        await txn.wait();
+        console.log("Thank You For your Donation", txn.hash);
 
-//         customerBalanceHandler();
+        customerBalanceHandler();
 
-//       } else {
-//         console.log("Ethereum object not found, install Metamask.");
-//         setError("Please install a MetaMask wallet to use our bank.");
-//       }
-//     } catch (error) {
-//       console.log(error)
-//     }
-//   }
+      } else {
+        console.log("Ethereum object not found, install Metamask.");
+        setError("Please install a MetaMask wallet to use our bank.");
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
 
   const customerBalanceHandler = async () => {
@@ -213,7 +213,7 @@ function App() {
 
   return (
     <main className="main-container">
-      <h2 className="headline"><span className="headline-gradient">Make Our Community Development Project Better By Donating 
+      <h2 className="headline"><span className="headline-gradient">Make Our Community Development Project Better By Donating To
       This Project</span> 💰</h2>
       <section className="customer-section px-10 pt-5 pb-10">
         {error && <p className="text-2xl text-red-700">{error}</p>}
@@ -222,6 +222,21 @@ function App() {
             <p>"Setup the name of your bank." </p> :
             <p className="text-3xl font-bold">{currentBankName}</p>
           }
+        </div>
+        <div className="mt-7 mb-9">
+          <form className="form-style">
+            <input
+              type="text"
+              className="input-style"
+              onChange={handleInputChange}
+              name="donate"
+              placeholder="0.0000 ETH"
+              value={inputValue.donate}
+            />
+            <button
+              className="btn-purple"
+              onClick={donateFundsHandler}>Donate Funds In ETH</button>
+          </form>
         </div>
         <div className="mt-7 mb-9">
           <form className="form-style">
