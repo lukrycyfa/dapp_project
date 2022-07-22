@@ -238,21 +238,6 @@ function App() {
               onClick={deposityMoneyHandler}>Deposit Money In ETH</button>
           </form>
         </div>
-//         <div className="mt-7 mb-9">
-//           <form className="form-style">
-//             <input
-//               type="text"
-//               className="input-style"
-//               onChange={handleInputChange}
-//               name="donate"
-//               placeholder="0.0000 ETH"
-//               value={inputValue.donate}
-//             />
-//             <button
-//               className="btn-purple"
-//               onClick={donateFundsHandler}>Donate Funds In ETH</button>
-//           </form>
-//         </div>
         <div className="mt-10 mb-10">
           <form className="form-style">
             <input
