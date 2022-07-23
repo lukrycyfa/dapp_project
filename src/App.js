@@ -71,6 +71,7 @@ function App() {
         console.log("Ethereum object not found, install Metamask.");
         setError("Please install a MetaMask wallet to use our community.");
       }
+      event.target.reset();
     } catch (error) {
       console.log(error)
     }
@@ -122,6 +123,7 @@ function App() {
         console.log("Ethereum object not found, install Metamask.");
         setError("Please install a MetaMask wallet to use our community.");
       }
+      event.target.reset();
     } catch (error) {
       console.log(error)
     }
@@ -172,6 +174,7 @@ function App() {
         console.log("Ethereum object not found, install Metamask.");
         setError("Please install a MetaMask wallet to use our community.");
       }
+      event.target.reset();
     } catch (error) {
       console.log(error)
     }
@@ -199,6 +202,7 @@ function App() {
         console.log("Ethereum object not found, install Metamask.");
         setError("Please install a MetaMask wallet to use our community.");
       }
+      event.target.reset();
     } catch (error) {
       console.log(error)
     }
