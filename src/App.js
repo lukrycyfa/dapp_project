@@ -4,16 +4,16 @@ import abi from "./contracts/Bank.json";
 
 function App() {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
-  const [isBankerOwner, setIsBankerOwner] = useState(false);
+  const [isCommunityAdmin, setIsCommunityAdmin] = useState(false);
   const [inputValue, setInputValue] = useState({ withdraw: "", deposit: "", bankName: "" });
-  const [bankOwnerAddress, setBankOwnerAddress] = useState(null);
-  const [customerTotalBalance, setCustomerTotalBalance] = useState(null);
-  const [currentBankName, setCurrentBankName] = useState(null);
-  const [customerAddress, setCustomerAddress] = useState(null);
+  const [communityAdminAddress, setCommunityAdminAddress] = useState(null);
+  const [userTotalBalance, setUserTotalBalance] = useState(null);
+  const [currentCommunityName, setCurrentCommunityName] = useState(null);
+  const [userAddress, setUserAddress] = useState(null);
   const [error, setError] = useState(null);
 
-  const contractAddress = '0xDa412c7D0365249cb79e689FbF05a9C741a2e635';
-  const contractABI = abi.abi;
+  const communityAddress = 'YOUR_CONTRACT_ADDRESS';
+  const communityABI = abi.abi;
 
   const checkIfWalletIsConnected = async () => {
     try {
@@ -21,10 +21,10 @@ function App() {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
         const account = accounts[0];
         setIsWalletConnected(true);
-        setCustomerAddress(account);
+        setUserAddress(account);
         console.log("Account Connected: ", account);
       } else {
-        setError("Please install a MetaMask wallet to use our bank.");
+        setError("Please install a MetaMask wallet to use our community.");
         console.log("No Metamask detected");
       }
     } catch (error) {
@@ -32,68 +32,68 @@ function App() {
     }
   }
 
-  const getBankName = async () => {
+  const getCommunityName = async () => {
     try {
       if (window.ethereum) {
 
         //read data
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const bankContract = new ethers.Contract(contractAddress, contractABI, signer);
+        const communityContract = new ethers.Contract(communityAddress, communityABI, signer);
 
-        let bankName = await bankContract.bankName();
-        bankName = utils.parseBytes32String(bankName);
-        setCurrentBankName(bankName.toString());
+        let communityName = await communityContract.communityName();
+        communityName = utils.parseBytes32String(communityName);
+        setCurrentCommunityName(communityName.toString());
       } else {
         console.log("Ethereum object not found, install Metamask.");
-        setError("Please install a MetaMask wallet to use our bank.");
+        setError("Please install a MetaMask wallet to use our community.");
       }
     } catch (error) {
       console.log(error)
     }
   }
 
-  const setBankNameHandler = async (event) => {
+  const setCommunityNameHandler = async (event) => {
     event.preventDefault();
     try {
       if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const bankContract = new ethers.Contract(contractAddress, contractABI, signer);
+        const communityContract = new ethers.Contract(communityAddress, communityABI, signer);
 
-        const txn = await bankContract.setBankName(utils.formatBytes32String(inputValue.bankName));
-        console.log("Setting Bank Name...");
+        const txn = await communityContract.setCommunityName(utils.formatBytes32String(inputValue.communityName));
+        console.log("Setting Community Name...");
         await txn.wait();
-        console.log("Bank Name Changed", txn.hash);
-        getBankName();
+        console.log("Community Name Changed", txn.hash);
+        getCommunityName();
 
       } else {
         console.log("Ethereum object not found, install Metamask.");
-        setError("Please install a MetaMask wallet to use our bank.");
+        setError("Please install a MetaMask wallet to use our community.");
       }
     } catch (error) {
       console.log(error)
     }
   }
 
-  const getbankOwnerHandler = async () => {
+  const getcommunityAdminHandler = async () => {
     try {
       if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const bankContract = new ethers.Contract(contractAddress, contractABI, signer);
+        const communityContract = new ethers.Contract(communityAddress, communityABI, signer);
 
-        let owner = await bankContract.bankOwner();
-        setBankOwnerAddress(owner);
+        let admin = await communityContract.communityAdmin();
+        setCommunityAdminAddress(admin);
 
         const [account] = await window.ethereum.request({ method: 'eth_requestAccounts' });
 
-        if (owner.toLowerCase() === account.toLowerCase()) {
-          setIsBankerOwner(true);
+        if (admin.toLowerCase() === account.toLowerCase()) {
+          setIsCommunityAdmin(true);
         }
       } else {
         console.log("Ethereum object not found, install Metamask.");
-        setError("Please install a MetaMask wallet to use our bank.");
+        setError("Please install a MetaMask wallet to use our community.");
       }
     } catch (error) {
       console.log(error)
@@ -106,21 +106,21 @@ function App() {
       if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const bankContract = new ethers.Contract(contractAddress, contractABI, signer);
+        const communityContract = new ethers.Contract(communityAddress, communityABI, signer);
 
-        let bankAddress = await bankContract.bankOwner();
-        console.log("provider signer...", bankAddress);
+        let communityAddress = await communityContract.communityAdmin();
+        console.log("provider signer...", communityAddress);
 
-        const txn = await bankContract.DonateFunds(bankAddress, ethers.utils.parseEther(inputValue.donate));
+        const txn = await communityContract.DonateFunds(communityAddress, ethers.utils.parseEther(inputValue.donate));
         console.log("Donating money...");
         await txn.wait();
-        console.log("Thank You For your Donation", txn.hash);
+        console.log("Thank You For your Donating to our community Project", txn.hash);
 
-        customerBalanceHandler();
+        userBalanceHandler();
 
       } else {
         console.log("Ethereum object not found, install Metamask.");
-        setError("Please install a MetaMask wallet to use our bank.");
+        setError("Please install a MetaMask wallet to use our community.");
       }
     } catch (error) {
       console.log(error)
@@ -128,20 +128,20 @@ function App() {
   }
 
 
-  const customerBalanceHandler = async () => {
+  const userBalanceHandler = async () => {
     try {
       if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const bankContract = new ethers.Contract(contractAddress, contractABI, signer);
+        const communityContract = new ethers.Contract(communityAddress, communityABI, signer);
 
-        let balance = await bankContract.getCustomerBalance();
-        setCustomerTotalBalance(utils.formatEther(balance));
+        let balance = await communityContract.getUserBalance();
+        setUserTotalBalance(utils.formatEther(balance));
         console.log("Retrieved balance...", balance);
 
       } else {
         console.log("Ethereum object not found, install Metamask.");
-        setError("Please install a MetaMask wallet to use our bank.");
+        setError("Please install a MetaMask wallet to use our community.");
       }
     } catch (error) {
       console.log(error)
@@ -159,18 +159,18 @@ function App() {
         //write data
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const bankContract = new ethers.Contract(contractAddress, contractABI, signer);
+        const communityContract = new ethers.Contract(communityAddress, communityABI, signer);
 
-        const txn = await bankContract.depositMoney({ value: ethers.utils.parseEther(inputValue.deposit) });
+        const txn = await communityContract.depositMoney({ value: ethers.utils.parseEther(inputValue.deposit) });
         console.log("Deposting money...");
         await txn.wait();
         console.log("Deposited money...done", txn.hash);
 
-        customerBalanceHandler();
+        userBalanceHandler();
 
       } else {
         console.log("Ethereum object not found, install Metamask.");
-        setError("Please install a MetaMask wallet to use our bank.");
+        setError("Please install a MetaMask wallet to use our community.");
       }
     } catch (error) {
       console.log(error)
@@ -183,21 +183,21 @@ function App() {
       if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const bankContract = new ethers.Contract(contractAddress, contractABI, signer);
+        const communityContract = new ethers.Contract(communityAddress, communityABI, signer);
 
         let myAddress = await signer.getAddress()
         console.log("provider signer...", myAddress);
 
-        const txn = await bankContract.withDrawMoney(myAddress, ethers.utils.parseEther(inputValue.withdraw));
+        const txn = await communityContract.withDrawMoney(myAddress, ethers.utils.parseEther(inputValue.withdraw));
         console.log("Withdrawing money...");
         await txn.wait();
         console.log("Money with drew...done", txn.hash);
 
-        customerBalanceHandler();
+        userBalanceHandler();
 
       } else {
         console.log("Ethereum object not found, install Metamask.");
-        setError("Please install a MetaMask wallet to use our bank.");
+        setError("Please install a MetaMask wallet to use our community.");
       }
     } catch (error) {
       console.log(error)
@@ -206,37 +206,22 @@ function App() {
 
   useEffect(() => {
     checkIfWalletIsConnected();
-    getBankName();
-    getbankOwnerHandler();
-    customerBalanceHandler()
+    getCommunityName();
+    getcommunityAdminHandler();
+    userBalanceHandler()
   }, [isWalletConnected])
 
   return (
     <main className="main-container">
-      <h2 className="headline"><span className="headline-gradient">Make Our Community Development Project Better By Donating To
+      <h2 className="headline"><span className="headline-gradient">Make Our Community Development Project Better By Donating 
       This Project</span> 💰</h2>
       <section className="customer-section px-10 pt-5 pb-10">
         {error && <p className="text-2xl text-red-700">{error}</p>}
         <div className="mt-5">
-          {currentBankName === "" && isBankerOwner ?
-            <p>"Setup the name of your bank." </p> :
-            <p className="text-3xl font-bold">{currentBankName}</p>
+          {currentCommunityName === "" && isCommunityAdmin ?
+            <p>"Setup the name of your community." </p> :
+            <p className="text-3xl font-bold">{currentCommunityName}</p>
           }
-        </div>
-        <div className="mt-7 mb-9">
-          <form className="form-style">
-            <input
-              type="text"
-              className="input-style"
-              onChange={handleInputChange}
-              name="donate"
-              placeholder="0.0000 ETH"
-              value={inputValue.donate}
-            />
-            <button
-              className="btn-purple"
-              onClick={donateFundsHandler}>Donate Funds In ETH</button>
-          </form>
         </div>
         <div className="mt-7 mb-9">
           <form className="form-style">
@@ -251,6 +236,21 @@ function App() {
             <button
               className="btn-purple"
               onClick={deposityMoneyHandler}>Deposit Money In ETH</button>
+          </form>
+        </div>
+        <div className="mt-7 mb-9">
+          <form className="form-style">
+            <input
+              type="text"
+              className="input-style"
+              onChange={handleInputChange}
+              name="donate"
+              placeholder="0.0000 ETH"
+              value={inputValue.donate}
+            />
+            <button
+              className="btn-purple"
+              onClick={donateFundsHandler}>Donate Funds In ETH</button>
           </form>
         </div>
         <div className="mt-10 mb-10">
@@ -271,36 +271,36 @@ function App() {
           </form>
         </div>
         <div className="mt-5">
-          <p><span className="font-bold">Customer Balance: </span>{customerTotalBalance}</p>
+          <p><span className="font-bold">Customer Balance: </span>{userTotalBalance}</p>
         </div>
         <div className="mt-5">
-          <p><span className="font-bold">Bank Owner Address: </span>{bankOwnerAddress}</p>
+          <p><span className="font-bold">Community Admin Address: </span>{communityAdminAddress}</p>
         </div>
         <div className="mt-5">
-          {isWalletConnected && <p><span className="font-bold">Your Wallet Address: </span>{customerAddress}</p>}
+          {isWalletConnected && <p><span className="font-bold">Your Wallet Address: </span>{userAddress}</p>}
           <button className="btn-connect" onClick={checkIfWalletIsConnected}>
             {isWalletConnected ? "Wallet Connected 🔒" : "Connect Wallet 🔑"}
           </button>
         </div>
       </section>
       {
-        isBankerOwner && (
+        isCommunityAdmin && (
           <section className="bank-owner-section">
-            <h2 className="text-xl border-b-2 border-indigo-500 px-10 py-4 font-bold">Bank Admin Panel</h2>
+            <h2 className="text-xl border-b-2 border-indigo-500 px-10 py-4 font-bold">Community Admin Panel</h2>
             <div className="p-10">
               <form className="form-style">
                 <input
                   type="text"
                   className="input-style"
                   onChange={handleInputChange}
-                  name="bankName"
-                  placeholder="Enter a Name for Your Bank"
-                  value={inputValue.bankName}
+                  name="communityName"
+                  placeholder="Enter a Community for Your Bank"
+                  value={inputValue.communityName}
                 />
                 <button
                   className="btn-grey"
-                  onClick={setBankNameHandler}>
-                  Set Bank Name
+                  onClick={setCommunityNameHandler}>
+                  Set Community Name
                 </button>
               </form>
             </div>
