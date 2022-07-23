@@ -274,7 +274,7 @@ function App() {
           <p><span className="font-bold">Customer Balance: </span>{userTotalBalance}</p>
         </div>
         <div className="mt-5">
-          <p><span className="font-bold">Community Admin Address: </span>{communityAdminAddress}</p>
+          <p><span className="font-bold">Community Address: </span>{communityAdminAddress}</p>
         </div>
         <div className="mt-5">
           {isWalletConnected && <p><span className="font-bold">Your Wallet Address: </span>{userAddress}</p>}
