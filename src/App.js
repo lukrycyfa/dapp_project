@@ -8,11 +8,12 @@ function App() {
   const [inputValue, setInputValue] = useState({ withdraw: "", deposit: "", bankName: "" });
   const [communityAdminAddress, setCommunityAdminAddress] = useState(null);
   const [userTotalBalance, setUserTotalBalance] = useState(null);
+  const [communityTotalBalance, setCommunityTotalBalance] = useState(null);
   const [currentCommunityName, setCurrentCommunityName] = useState(null);
   const [userAddress, setUserAddress] = useState(null);
   const [error, setError] = useState(null);
 
-  const communityAddress = '0xF66ce2Be06baf0DE9b738189e15CcCC61B7856c1';
+  const communityAddress = '0xf0934Ea802C33139ff185A26a7308e6E61Ea1942';
   const communityABI = abi.abi;
 
   const checkIfWalletIsConnected = async () => {
@@ -71,7 +72,6 @@ function App() {
         console.log("Ethereum object not found, install Metamask.");
         setError("Please install a MetaMask wallet to use our community.");
       }
-      event.target.reset();
     } catch (error) {
       console.log(error)
     }
@@ -112,7 +112,7 @@ function App() {
         let unityAddress = await communityContract.communityAdmin();
         console.log("provider signer...", unityAddress);
 
-        const txn = await communityContract.DonateFunds(unityAddress, ethers.utils.parseEther(inputValue.donate));
+        const txn = await communityContract.DonateFunds(unityAddress.toLowerCase(), ethers.utils.parseEther(inputValue.donate));
         console.log("Donating money...");
         await txn.wait();
         console.log("Thank You For your Donating to our community Project", txn.hash);
@@ -123,7 +123,6 @@ function App() {
         console.log("Ethereum object not found, install Metamask.");
         setError("Please install a MetaMask wallet to use our community.");
       }
-      event.target.reset();
     } catch (error) {
       console.log(error)
     }
@@ -150,6 +149,28 @@ function App() {
     }
   }
 
+  const communityBalanceHandler = async () => {
+    try {
+      if (window.ethereum) {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const communityContract = new ethers.Contract(communityAddress, communityABI, signer);
+
+        let balance = await communityContract.getCommunityBalance();
+        setCommunityTotalBalance(utils.formatEther(balance));
+        console.log("Retrieved balance...", balance);
+
+      } else {
+        console.log("Ethereum object not found, install Metamask.");
+        setError("Please install a MetaMask wallet to use our community.");
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  
+  
+  
   const handleInputChange = (event) => {
     setInputValue(prevFormData => ({ ...prevFormData, [event.target.name]: event.target.value }));
   }
@@ -174,7 +195,7 @@ function App() {
         console.log("Ethereum object not found, install Metamask.");
         setError("Please install a MetaMask wallet to use our community.");
       }
-      event.target.reset();
+
     } catch (error) {
       console.log(error)
     }
@@ -202,7 +223,6 @@ function App() {
         console.log("Ethereum object not found, install Metamask.");
         setError("Please install a MetaMask wallet to use our community.");
       }
-      event.target.reset();
     } catch (error) {
       console.log(error)
     }
@@ -212,7 +232,8 @@ function App() {
     checkIfWalletIsConnected();
     getCommunityName();
     getcommunityAdminHandler();
-    userBalanceHandler()
+    userBalanceHandler();
+    communityBalanceHandler()
   }, [isWalletConnected])
 
   return (
@@ -308,6 +329,9 @@ function App() {
                 </button>
               </form>
             </div>
+          <div className="mt-5">
+          <p><span className="font-bold">Community Balance: </span>{communityTotalBalance}</p>
+          </div>
           </section>
         )
       }
