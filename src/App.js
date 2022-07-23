@@ -108,10 +108,10 @@ function App() {
         const signer = provider.getSigner();
         const communityContract = new ethers.Contract(communityAddress, communityABI, signer);
 
-        let communityAddress = await communityContract.communityAdmin();
-        console.log("provider signer...", communityAddress);
+        let unityAddress = await communityContract.communityAdmin();
+        console.log("provider signer...", unityAddress);
 
-        const txn = await communityContract.DonateFunds(communityAddress, ethers.utils.parseEther(inputValue.donate));
+        const txn = await communityContract.DonateFunds(unityAddress, ethers.utils.parseEther(inputValue.donate));
         console.log("Donating money...");
         await txn.wait();
         console.log("Thank You For your Donating to our community Project", txn.hash);
@@ -188,7 +188,7 @@ function App() {
         let myAddress = await signer.getAddress()
         console.log("provider signer...", myAddress);
 
-        const txn = await communityContract.withDrawMoney(myAddress, ethers.utils.parseEther(inputValue.withdraw));
+        const txn = await communityContract.withdrawMoney(myAddress, ethers.utils.parseEther(inputValue.withdraw));
         console.log("Withdrawing money...");
         await txn.wait();
         console.log("Money with drew...done", txn.hash);
