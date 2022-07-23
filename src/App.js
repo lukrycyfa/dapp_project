@@ -294,7 +294,7 @@ function App() {
                   className="input-style"
                   onChange={handleInputChange}
                   name="communityName"
-                  placeholder="Enter a Community for Your Bank"
+                  placeholder="Enter a Community Name for Your Community"
                   value={inputValue.communityName}
                 />
                 <button
