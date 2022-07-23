@@ -12,7 +12,7 @@ function App() {
   const [userAddress, setUserAddress] = useState(null);
   const [error, setError] = useState(null);
 
-  const communityAddress = 'YOUR_CONTRACT_ADDRESS';
+  const communityAddress = '0xF66ce2Be06baf0DE9b738189e15CcCC61B7856c1';
   const communityABI = abi.abi;
 
   const checkIfWalletIsConnected = async () => {
