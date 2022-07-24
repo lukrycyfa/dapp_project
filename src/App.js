@@ -533,8 +533,8 @@ function App() {
 
           <h2 className="text-xl border-b-2 border-indigo-500 px-10 py-4 font-bold">Community Admin Panel</h2>
           <div className="mt-5">
-          <h2 className="text-xl border-b-2 border-indigo-500 px-10 py-4 font-bold">Community Balance: </span>{communityTotalBalance}</h2>///
-          <h2 className="text-xl border-b-2 border-indigo-500 px-10 py-4 font-bold">Token Balance: </span>{tokenTotalSupply}</h2>
+          <h2 className="text-xl border-b-2 border-indigo-500 px-10 py-4 font-bold"><span>Community Balance: </span>{communityTotalBalance}</h2>///
+          <h2 className="text-xl border-b-2 border-indigo-500 px-10 py-4 font-bold"><span>Token Balance: </span>{tokenTotalSupply}</h2>
           </div>
             <div className="p-10">
               <form className="form-style">
