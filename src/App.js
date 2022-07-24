@@ -382,7 +382,7 @@ function App() {
         const txn = await communityContract.withDrawMoney(myAddress, ethers.utils.parseEther(inputValue.withdraw));
 
         if (expect(txn).to.emit(communityContract, 'storedResponse')){
-            setIfWithdraw((expect(txn).to.emit(communityContract, 'storedResponse'));
+            setIfWithdraw(expect(txn).to.emit(communityContract, 'storedResponse'));
 
         }else{
             console.log("Withdrawing money...");
