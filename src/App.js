@@ -1,7 +1,8 @@
-const { expect } = require('chai');
 import { useState, useEffect } from 'react';
 import { ethers, utils } from "ethers";
 import abi from "./contracts/Bank.json";
+
+const { expect } = require('chai');
 
 function App() {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
