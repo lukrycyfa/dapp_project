@@ -26,8 +26,8 @@ function App() {
   const [tokenBurnt, setTokenBurnt] = useState(null);
   const [tokenMinted, setTokenMinted] = useState(null);
   const [onlyAdmin, setOnlyAdmin] = useState(null);
-  const [ifDeposite, setIfDeposite] = usedState(null);
-  const [ifWithdraw, setIfWithdraw] = usedState(null);  
+  const [ifDeposite, setIfDeposite] = useState(null);
+  const [ifWithdraw, setIfWithdraw] = useState(null);  
 
   ////
   const [error, setError] = useState(null);
@@ -63,7 +63,7 @@ function App() {
       if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const tokenContract = new ethers.Contract(contractAddress, contractABI, signer);
+        const tokenContract = new ethers.Contract(communityAddress, communityABI, signer);
         const [account] = await window.ethereum.request({ method: 'eth_requestAccounts' });
 
         let tokenName = await tokenContract.name();
@@ -97,7 +97,7 @@ function App() {
       if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const tokenContract = new ethers.Contract(contractAddress, contractABI, signer);
+        const tokenContract = new ethers.Contract(communityAddress, communityABI, signer);
 
         const txn = await tokenContract.transfer(inputValue.walletAddress, utils.parseEther(inputValue.transferAmount));
         console.log("Transfering tokens...");
@@ -121,7 +121,7 @@ function App() {
       if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const tokenContract = new ethers.Contract(contractAddress, contractABI, signer);
+        const tokenContract = new ethers.Contract(communityAddress, communityABI, signer);
 
         const txn = await tokenContract.burn(utils.parseEther(inputValue.burnAmount));
         console.log("Burning tokens...");        
@@ -149,7 +149,7 @@ function App() {
       if (window.ethereum) {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
-        const tokenContract = new ethers.Contract(contractAddress, contractABI, signer);
+        const tokenContract = new ethers.Contract(communityAddress, communityABI, signer);
         let tokenOwner = await tokenContract.owner();
         const txn = await tokenContract.mint(tokenOwner, utils.parseEther(inputValue.mintAmount));
         console.log("Minting tokens...");
