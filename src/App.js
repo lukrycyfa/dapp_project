@@ -1,3 +1,4 @@
+const { expect } = require('chai');
 import { useState, useEffect } from 'react';
 import { ethers, utils } from "ethers";
 import abi from "./contracts/Bank.json";
@@ -223,7 +224,6 @@ function App() {
     } catch (error) {
       console.log(error)
     }
-    this.reset();
   }
 
   const getcommunityAdminHandler = async () => {
@@ -284,6 +284,7 @@ function App() {
       this.reset()
     } catch (error) {
       console.log(error)
+      setTokenTransferredEth(error.message.toString())
     }
   }
 
@@ -421,7 +422,7 @@ function App() {
   return (
     <main className="main-container">
       <h2 className="headline"><span className="headline-gradient">Make Our Community Development and NextCoin Project Better By Donating 
-      This Project</span> 💰
+      To This Project</span> 💰
 
       <span className="headline-gradient">NextCoin</span>
         <img className="inline p-3 ml-2" src="https://i.imgur.com/5JfHKHU.png" alt="Meme Coin" width="60" height="30" />
@@ -568,6 +569,7 @@ function App() {
                   onClick={burnTokens}>
                   Burn Tokens
                 </button>
+                <span className="mr-5"><strong></strong> {tokenBurnt} </span>
               </form>
             </div>
             <div className="mt-10 mb-10">
@@ -585,6 +587,7 @@ function App() {
                   onClick={mintTokens}>
                   Mint Tokens
                 </button>
+                <span className="mr-5"><strong></strong> {tokenMinted} </span>
               </form>
             </div>
           </section>
