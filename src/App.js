@@ -171,11 +171,6 @@ function App() {
     }
   }
 
-  const handleInputChange = (event) => {
-    setInputValue(prevFormData => ({ ...prevFormData, [event.target.name]: event.target.value }));
-  }
-
-
   /////
 
   const getCommunityName = async () => {
