@@ -495,7 +495,7 @@ function App() {
           <form className="form-style">
             <input
               type="text"
-              className="input-double"
+              className="input-style"
               onChange={handleInputChange}
               name="walletAddress"
               placeholder="Wallet Address"
@@ -503,7 +503,7 @@ function App() {
             />
             <input
               type="text"
-              className="input-double"
+              className="input-style"
               onChange={handleInputChange}
               name="transferAmount"
               placeholder={`0.0000 ${tokenSymbol}`}
