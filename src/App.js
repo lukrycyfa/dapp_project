@@ -151,7 +151,6 @@ function App() {
     event.preventDefault();
     try {
       if (window.ethereum) {
-        let emiter //////adjust
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
         const tokenContract = new ethers.Contract(communityAddress, communityABI, signer);
@@ -166,7 +165,7 @@ function App() {
         let tokenSupply = await tokenContract.totalSupply();
         tokenSupply = utils.formatEther(tokenSupply)
         setTokenTotalSupply(tokenSupply);        
-        setTokenMinted(expect(txn).to.emit(emiter, 'additionalTokensMinted')) //////adjust
+        setTokenMinted(expect(txn).to.emit(txn, 'additionalTokensMinted')) //////adjust
 
       } else {
         console.log("Ethereum object not found, install Metamask.");
