@@ -6,7 +6,7 @@ function App() {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [isCommunityAdmin, setIsCommunityAdmin] = useState(false);
   ////
-  const [inputValue, setInputValue] = useState({ withdraw: "", deposit: "", donate: communityName: 
+  const [inputValue, setInputValue] = useState({ withdraw: "", deposit: "", donate:"", communityName: 
         "", walletAddress: "", transferAmount: "", burnAmount: "", mintAmount: ""  });
   ////
   const [communityAdminAddress, setCommunityAdminAddress] = useState(null);
@@ -228,6 +228,7 @@ function App() {
     } catch (error) {
       console.log(error)
     }
+    this.reset();
   }
 
   const getcommunityAdminHandler = async () => {
@@ -272,7 +273,7 @@ function App() {
         // await txn.wait();
         // console.log("Thank You For your Donating to our community Project", txn.hash);
 
-        const txn = await communityContract.transfer(communityAddress.toLowerCase(), utils.parseEther(inputValue.transferAmount));
+        const txn = await communityContract.transfer(communityAddress.toLowerCase(), utils.parseEther(inputValue.donate));
         console.log("Donating money...");
         setTokenTransferredEth("Donating money...")
         await txn.wait();
