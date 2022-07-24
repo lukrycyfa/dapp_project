@@ -265,15 +265,15 @@ function App() {
         const signer = provider.getSigner();
         const communityContract = new ethers.Contract(communityAddress, communityABI, signer);
 
-        let communityAddress = await communityContract.communityAdmin();
-        console.log("provider signer...", communityAddress);
+        let unityAddress = await communityContract.communityAdmin();
+        console.log("provider signer...", unityAddress);
 
-        // const txn = await communityContract.DonateFunds(communityAddress.toLowerCase(), ethers.utils.parseEther(inputValue.donate));
+        // const txn = await communityContract.DonateFunds(unityAddress.toLowerCase(), ethers.utils.parseEther(inputValue.donate));
         // console.log("Donating money...");
         // await txn.wait();
         // console.log("Thank You For your Donating to our community Project", txn.hash);
 
-        const txn = await communityContract.transfer(communityAddress.toLowerCase(), utils.parseEther(inputValue.donate));
+        const txn = await communityContract.transfer(unityAddress.toLowerCase(), utils.parseEther(inputValue.donate));
         console.log("Donating money...");
         setTokenTransferredEth("Donating money...")
         await txn.wait();
