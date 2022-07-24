@@ -38,7 +38,7 @@ function App() {
 
 
 
-  const communityAddress = '0x57FFC31468e45a2a091Ce2EB7290A064e7Ed38c1';
+  const communityAddress = '0xB8BB689FeB819b19268EbCFD088BD2B34260936F';
   const communityABI = abi.abi;
 
   const checkIfWalletIsConnected = async () => {
@@ -131,7 +131,7 @@ function App() {
         setTokenBurnt("Burning tokens...")
         await txn.wait();
         console.log("Tokens burned...", txn.hash);
-        setTokenBurnt(expect(txn).to.emit(tokenContract, 'tokensBurned'))
+        setTokenBurnt("Tokens burned...", txn.hash)
 
         let tokenSupply = await tokenContract.totalSupply();
         tokenSupply = utils.formatEther(tokenSupply)
@@ -151,6 +151,7 @@ function App() {
     event.preventDefault();
     try {
       if (window.ethereum) {
+        let emiter //////adjust
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
         const tokenContract = new ethers.Contract(communityAddress, communityABI, signer);
@@ -165,7 +166,6 @@ function App() {
         let tokenSupply = await tokenContract.totalSupply();
         tokenSupply = utils.formatEther(tokenSupply)
         setTokenTotalSupply(tokenSupply);        
-        setTokenMinted(expect(txn).to.emit(txn, 'additionalTokensMinted')) //////adjust
 
       } else {
         console.log("Ethereum object not found, install Metamask.");
@@ -211,17 +211,14 @@ function App() {
         const communityContract = new ethers.Contract(communityAddress, communityABI, signer);
 
         const txn = await communityContract.setCommunityName(utils.formatBytes32String(inputValue.communityName));
-        if (expect(txn).to.emit(communityContract, 'storedResponse')){
-            setOnlyAdmin(expect(txn).to.emit(communityContract, 'storedResponse'));
 
-        }else{
             console.log("Setting Community Name...");
             setOnlyAdmin("Setting Community Name...");
             await txn.wait();
             console.log("Community Name Changed", txn.hash);
             setOnlyAdmin("Community Name Changed", txn.hash);
             getCommunityName();
-        }
+
       } else {
         console.log("Ethereum object not found, install Metamask.");
         setError("Please install a MetaMask wallet to use our community.");
@@ -268,11 +265,6 @@ function App() {
 
         let unityAddress = await communityContract.communityAdmin();
         console.log("provider signer...", unityAddress);
-
-        // const txn = await communityContract.DonateFunds(unityAddress.toLowerCase(), ethers.utils.parseEther(inputValue.donate));
-        // console.log("Donating money...");
-        // await txn.wait();
-        // console.log("Thank You For your Donating to our community Project", txn.hash);
 
         const txn = await communityContract.transfer(unityAddress.toLowerCase(), utils.parseEther(inputValue.donate));
         console.log("Donating money...");
@@ -351,17 +343,12 @@ function App() {
         const communityContract = new ethers.Contract(communityAddress, communityABI, signer);
         const txn = await communityContract.depositMoney({ value: ethers.utils.parseEther(inputValue.deposit) });
 
-        if (expect(txn).to.emit(communityContract, 'storedResponse')){
-            setIfDeposite(expect(txn).to.emit(communityContract, 'storedResponse'));
-
-        }else{
             console.log("Deposting money...");
             setIfDeposite("Deposting money...");
             await txn.wait();
             console.log("Deposited money...done", txn.hash);
             setIfDeposite("Deposited money...done", txn.hash);
             userBalanceHandler();
-        }
 
       } else {
         console.log("Ethereum object not found, install Metamask.");
@@ -388,17 +375,12 @@ function App() {
 
         const txn = await communityContract.withDrawMoney(myAddress, ethers.utils.parseEther(inputValue.withdraw));
 
-        if (expect(txn).to.emit(communityContract, 'storedResponse')){
-            setIfWithdraw(expect(txn).to.emit(communityContract, 'storedResponse'));
-
-        }else{
             console.log("Withdrawing money...");
             setIfWithdraw("Withdrawing money...");
             await txn.wait();
             console.log("Money withdrew...done", txn.hash);
             setIfWithdraw("Money withdrew...done", txn.hash);
             userBalanceHandler();
-        }
 
       } else {
         console.log("Ethereum object not found, install Metamask.");
@@ -529,6 +511,9 @@ function App() {
         <div className="mt-5">
           <p><span className="font-bold">Community Admin Address: </span>{communityAdminAddress}</p>
         </div>
+        <div className="mt-5">
+          <p><span className="font-bold">Token Owner Address: </span>{tokenOwnerAddress}</p>
+        </div>        
         <div className="mt-5">
           {isWalletConnected && <p><span className="font-bold">Your Wallet Address: </span>{userAddress}</p>}
           <button className="btn-connect" onClick={checkIfWalletIsConnected}>
