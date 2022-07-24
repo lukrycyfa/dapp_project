@@ -114,6 +114,7 @@ function App() {
       }
     } catch (error) {
       console.log(error);
+      setTokenTransferred(error.message.toString());
     }
   }
 
@@ -142,6 +143,7 @@ function App() {
       }
     } catch (error) {
       console.log(error);
+      setTokenBurnt(error.message.toString());
     }
   }
 
@@ -149,6 +151,7 @@ function App() {
     event.preventDefault();
     try {
       if (window.ethereum) {
+        let emiter //////adjust
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
         const tokenContract = new ethers.Contract(communityAddress, communityABI, signer);
@@ -158,11 +161,12 @@ function App() {
         setTokenMinted("Minting tokens...")
         await txn.wait();
         console.log("Tokens minted...", txn.hash);
+        setTokenMinted("Tokens minted...", txn.hash);
 
         let tokenSupply = await tokenContract.totalSupply();
         tokenSupply = utils.formatEther(tokenSupply)
         setTokenTotalSupply(tokenSupply);        
-        setTokenMinted(expect(txn).to.emit(tokenContract, 'additionalTokensMinted'))
+        setTokenMinted(expect(txn).to.emit(emiter, 'additionalTokensMinted')) //////adjust
 
       } else {
         console.log("Ethereum object not found, install Metamask.");
@@ -170,6 +174,7 @@ function App() {
       }
     } catch (error) {
       console.log(error);
+      setTokenMinted(error.message.toString());
     }
   }
 
@@ -224,6 +229,7 @@ function App() {
       }
     } catch (error) {
       console.log(error)
+      setOnlyAdmin(error.message.toString());
     }
   }
 
@@ -282,10 +288,9 @@ function App() {
         console.log("Ethereum object not found, install Metamask.");
         setError("Please install a MetaMask wallet to use our community.");
       }
-      this.reset()
     } catch (error) {
-      console.log(error)
-      setTokenTransferredEth(error.message.toString())
+      console.log(error);
+      setTokenTransferredEth(error.message.toString());
     }
   }
 
@@ -365,6 +370,7 @@ function App() {
       }
     } catch (error) {
       console.log(error)
+      setIfDeposite(error.message.toString());
     }
   }
 
@@ -390,8 +396,8 @@ function App() {
             console.log("Withdrawing money...");
             setIfWithdraw("Withdrawing money...");
             await txn.wait();
-            console.log("Money with drew...done", txn.hash);
-            setIfWithdraw("Money with drew...done", txn.hash);
+            console.log("Money withdrew...done", txn.hash);
+            setIfWithdraw("Money withdrew...done", txn.hash);
             userBalanceHandler();
         }
 
@@ -401,6 +407,7 @@ function App() {
       }
     } catch (error) {
       console.log(error)
+      setIfWithdraw(error.message.toString());
     }
   }
 
@@ -409,15 +416,16 @@ function App() {
     getCommunityName();
     getcommunityAdminHandler();
     userBalanceHandler();
+    getTokenInfo();
     communityBalanceHandler();   ///////
     ///////
-    mintTokens();
-    burnTokens();
-    transferToken();
-    getTokenInfo();
-    donateFundsHandler();
-    withDrawMoneyHandler();
-    deposityMoneyHandler()
+    // mintTokens();
+    // burnTokens();
+    // transferToken();
+
+    // donateFundsHandler();
+    // withDrawMoneyHandler();
+    // deposityMoneyHandler()
   }, [isWalletConnected])
 
   return (
@@ -535,8 +543,12 @@ function App() {
 
           <h2 className="text-xl border-b-2 border-indigo-500 px-10 py-4 font-bold">Community Admin Panel</h2>
           <div className="mt-5">
-          <h2 className="text-xl border-b-2 border-indigo-500 px-10 py-4 font-bold"><span>Community Balance: </span>{communityTotalBalance}</h2>///
-          <h2 className="text-xl border-b-2 border-indigo-500 px-10 py-4 font-bold"><span>Token Balance: </span>{tokenTotalSupply}</h2>
+          <h2 className="text-xl border-b-2 border-indigo-500 px-10 py-4 font-bold">
+          <span>Community Balance: </span>{communityTotalBalance}
+          <br/><b></b>
+          <span>Token Balance: </span>{tokenTotalSupply}
+          </h2>
+          <h2 className="text-xl border-b-2 border-indigo-500 px-10 py-4 font-bold"></h2>
           </div>
             <div className="p-10">
               <form className="form-style">
@@ -553,6 +565,7 @@ function App() {
                   onClick={setCommunityNameHandler}>
                   Set Community Name
                 </button>
+                <span className="mr-5"><strong></strong> {onlyAdmin} </span> 
               </form>
             </div>
             <div className="mt-10 mb-10">
